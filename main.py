@@ -67,7 +67,7 @@ def check_if_win():
     row_winner = check_rows()
     column_winner = check_columns()
     diagonal_winner = check_diagonals()
-    winner = row_winner if row_winner else column_winner if column_winner else diagonal_winner if diagonal_winner else {}
+    winner = row_winner or column_winner or diagonal_winner or {}
     if winner.get("name"):
         game_over = True
 
