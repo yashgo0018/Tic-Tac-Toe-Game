@@ -43,8 +43,6 @@ def check_rows():
     if row1 or row2 or row3:
         token = board[0 if row1 else 3 if row2 else 6]
         return players[0 if token == "X" else 1]
-    else:
-        return None
 
 
 def check_columns():
@@ -54,8 +52,6 @@ def check_columns():
     if col1 or col2 or col3:
         token = board[0 if col1 else 1 if col2 else 2]
         return players[0 if token == "X" else 1]
-    else:
-        return None
 
 
 def check_diagonals():
@@ -64,8 +60,6 @@ def check_diagonals():
     if diagonal1 or diagonal2:
         token = board[0 if diagonal1 else 2]
         return players[0 if token == "X" else 1]
-    else:
-        return None
 
 
 def check_if_win():
