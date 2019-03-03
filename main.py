@@ -1,4 +1,4 @@
-game_not_over = True
+game_over = False
 
 board = ["-", "-", "-",
          "-", "-", "-",
@@ -9,9 +9,7 @@ players = ({"name": "", "token": "X", "index": 0},
 
 player_fault = False
 
-
-def toggle_game_over(game_over):
-    return not game_over
+winner = {}
 
 
 def display_board():
@@ -38,12 +36,52 @@ def flip_player():
     current_player = players[0] if current_player.get("index") == 1 else players[1]
 
 
+def check_rows():
+    row1 = board[0] == board[1] == board[2] != "-"
+    row2 = board[3] == board[4] == board[5] != "-"
+    row3 = board[6] == board[7] == board[8] != "-"
+    if row1 or row2 or row3:
+        token = board[0 if row1 else 3 if row2 else 6]
+        return players[0 if token == "X" else 1]
+    else:
+        return None
+
+
+def check_columns():
+    col1 = board[0] == board[3] == board[6] != "-"
+    col2 = board[1] == board[4] == board[7] != "-"
+    col3 = board[2] == board[5] == board[8] != "-"
+    if col1 or col2 or col3:
+        token = board[0 if col1 else 1 if col2 else 2]
+        return players[0 if token == "X" else 1]
+    else:
+        return None
+
+
+def check_diagonals():
+    diagonal1 = board[0] == board[4] == board[8] != "-"
+    diagonal2 = board[2] == board[4] == board[6] != "-"
+    if diagonal1 or diagonal2:
+        token = board[0 if diagonal1 else 2]
+        return players[0 if token == "X" else 1]
+    else:
+        return None
+
+
 def check_if_win():
-    pass
+    global winner, game_over
+    row_winner = check_rows()
+    column_winner = check_columns()
+    diagonal_winner = check_diagonals()
+    winner = row_winner if row_winner else column_winner if column_winner else diagonal_winner if diagonal_winner else {}
+    if winner.get("name"):
+        game_over = True
 
 
 def check_if_tie():
-    pass
+    global game_over
+    if "-" not in board and not game_over:
+        game_over = True
 
 
 def check_if_game_over():
@@ -65,15 +103,19 @@ def play_game():
     # display initial board
     display_board()
 
-    while game_not_over:
+    while not game_over:
         handle_turn()
+
         # If game over terminate the game
         check_if_game_over()
+
         if not player_fault:
             flip_player()
         else:
             # Resetting the player fault for next time
             player_fault = False
+
+    print(f"{winner.get('name')} won the game." if winner.get("name") else "The game was a draw.")
 
 
 play_game()
